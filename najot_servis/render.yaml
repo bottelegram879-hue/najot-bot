@@ -1,0 +1,36 @@
+# Render Blueprint: Telegram bot (webhook) + PostgreSQL database
+# Deploy: https://render.com/deploy?repo=<GitHub repo URL>
+services:
+  - type: web
+    name: najot-servis-bot
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m bot
+    healthCheckPath: /ping
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: BOT_TOKEN
+        sync: false            # entered in the Render dashboard, never stored in git
+      - key: OWNER_SETUP_CODE
+        generateValue: true
+      - key: NOTIFY_TARGETS
+        value: "@Najotservis"
+      - key: OWNER_USERNAMES
+        value: Najotservis
+      - key: TIMEZONE
+        value: Asia/Tashkent
+      - key: ANTHROPIC_API_KEY
+        sync: false            # optional: leave empty for the simple assistant
+      - key: DATABASE_URL
+        fromDatabase:
+          name: najot-servis-db
+          property: connectionString
+
+databases:
+  - name: najot-servis-db
+    plan: free
+    region: frankfurt
+    databaseName: najot_servis
