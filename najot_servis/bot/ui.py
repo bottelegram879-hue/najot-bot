@@ -55,11 +55,12 @@ def service_label(lang: str, code: str) -> str:
 
 # ---------------- keyboards ----------------
 
-def webapp_btn(text: str, lang: str = "ru") -> InlineKeyboardButton | None:
-    """Button that opens the request form (Mini App) at its CURRENT address, in the client's language."""
+def webapp_btn(text: str, lang: str = "ru", sos: bool = False) -> InlineKeyboardButton | None:
+    """Button that opens the request form (Mini App) at its CURRENT address, in the client's language.
+    `sos` opens it with «Вызов мастера» already chosen."""
     if not MINIAPP.get("url"):
         return None
-    url = f"{MINIAPP['url']}?lang={lang if lang in ('ru', 'uz', 'en') else 'ru'}"
+    url = f"{MINIAPP['url']}?lang={lang if lang in ('ru', 'uz', 'en') else 'ru'}" + ("&sos=1" if sos else "")
     return InlineKeyboardButton(text=text, web_app=WebAppInfo(url=url), style=BUTTON_STYLE)
 
 

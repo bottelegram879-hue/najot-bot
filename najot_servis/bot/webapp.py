@@ -92,6 +92,11 @@ BRIDGE = r"""
   }
   window.addEventListener('load', function(){
     goForm(); setTimeout(goForm, 600);
+    /* «🆘 Сломался в пути» opens the same form with «Вызов мастера» already chosen */
+    if (/[?&]sos=1/.test(location.search)){
+      var call = document.querySelector('input[name="visit"][value="call"]');
+      if (call){ call.checked = true; call.dispatchEvent(new Event('change', { bubbles: true })); }
+    }
     api('/api/webapp/me').then(function(j){
       var p = j.prefill || {};
       setVal('f_name', p.name); setVal('f_phone', p.phone); setVal('f_brand', p.brand);

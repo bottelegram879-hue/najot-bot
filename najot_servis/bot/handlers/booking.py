@@ -228,8 +228,10 @@ async def cb_sos(cb: CallbackQuery, state: FSMContext, session: AsyncSession, la
     await state.clear()
     await cb.answer()
     st = await get_settings(session)
+    # the same website form as «Записать грузовик», with «Вызов мастера» chosen; chat card if the form is down
+    start = webapp_btn(t(lang, "btn_sos_start"), lang, sos=True) or btn(t(lang, "btn_sos_start"), "sos:go")
     await show(cb, t(lang, "sos_intro", phone=h(st["phone"])),
-               markup([btn(t(lang, "btn_sos_start"), "sos:go")], [btn(t(lang, "btn_call"), "menu:call")], nav(lang)))
+               markup([start], [btn(t(lang, "btn_call"), "menu:call")], nav(lang)))
 
 
 @router.callback_query(F.data == "sos:go")
